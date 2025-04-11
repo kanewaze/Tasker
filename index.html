@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كشف حساب / محمود عبدالقادر كاني</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="https://www.nbe.com.eg/NBE/Mainsite/siteimages/NBE-logo.svg" alt="NBE Logo" class="logo">
+        <h1>كشف حساب / محمود عبدالقادر كاني</h1>
+    </header>
+    
+    <div class="filters">
+        <label for="sortBy">ترتيب حسب:</label>
+        <select id="sortBy">
+            <option value="amount">المبلغ</option>
+            <option value="date">تاريخ الإصدار</option>
+            <option value="due">تاريخ الاستحقاق</option>
+        </select>
+        <label class="switch">
+            <input type="checkbox" id="daySortToggle">
+            <span class="slider"></span>
+        </label>
+        <span>ترتيب حسب الأيام فقط</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>المبلغ</th>
+                <th>تاريخ الإصدار</th>
+                <th>تاريخ الاستحقاق</th>
+                <th>الفائدة</th>
+            </tr>
+        </thead>
+        <tbody id="statementBody">
+            <!-- سيتم إدراج البيانات هنا تلقائيًا -->
+        </tbody>
+    </table>
+    
+    <div class="total">
+        <h2>إجمالي المبلغ: <span id="totalAmount">0</span> جنيه</h2>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
