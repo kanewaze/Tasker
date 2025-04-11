@@ -1,3 +1,5 @@
+/* style.css */
+
 body {
     font-family: 'Cairo', sans-serif;
     background: #121212;
@@ -10,17 +12,17 @@ body {
     flex-direction: column;
     min-height: 100vh;
     text-align: center;
-}
-
-h1 {
+  }
+  
+  h1 {
     margin-top: 30px;
     font-size: 32px;
     color: #ffffff;
-    text-shadow: 0 0 10px rgba(255,255,255,0.1);
-}
-
-.container,
-.tab {
+    text-shadow: 0 0 10px rgba(255,255,255,0.2);
+  }
+  
+  .container,
+  .tab {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,11 +34,11 @@ h1 {
     border-radius: 20px;
     backdrop-filter: blur(10px);
     margin: 20px auto;
-}
-
-button,
-input[type="text"],
-.upload-btn {
+  }
+  
+  button,
+  input[type="text"],
+  .upload-btn {
     margin: 10px 0;
     padding: 10px 20px;
     border-radius: 12px;
@@ -45,33 +47,33 @@ input[type="text"],
     width: 100%;
     max-width: 400px;
     box-sizing: border-box;
-}
-
-button {
+  }
+  
+  button {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     backdrop-filter: blur(8px);
     cursor: pointer;
     transition: 0.3s;
-}
-
-button:hover {
+  }
+  
+  button:hover {
     background: rgba(255, 255, 255, 0.2);
-}
-
-input[type="text"] {
+  }
+  
+  input[type="text"] {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid #444;
     backdrop-filter: blur(6px);
-}
-
-.tab {
+  }
+  
+  .tab {
     display: none;
     text-align: center;
-}
-
-.task-item {
+  }
+  
+  .task-item {
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
     margin: 10px 0;
@@ -81,22 +83,22 @@ input[type="text"] {
     position: relative;
     text-align: right;
     box-sizing: border-box;
-}
-
-.task-date {
+  }
+  
+  .task-date {
     font-size: 13px;
     color: #bbb;
     margin-top: 5px;
-}
-
-.task-actions {
+  }
+  
+  .task-actions {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: 10px;
-}
-
-.upload-btn {
+  }
+  
+  .upload-btn {
     display: inline-block;
     background: rgba(255, 255, 255, 0.1);
     color: white;
@@ -104,12 +106,13 @@ input[type="text"] {
     cursor: pointer;
     backdrop-filter: blur(8px);
     text-align: center;
-}
-
-.upload-btn input {
+  }
+  
+  .upload-btn input {
     display: none;
-}
-
-h2 {
+  }
+  
+  h2 {
     margin-bottom: 15px;
-}
+  }
+  

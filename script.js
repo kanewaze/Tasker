@@ -1,167 +1,134 @@
-// استيراد Firebase SDK
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get, onValue } from "firebase/database";
+// script.js
 
-// تكوين Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  push,
+  onValue,
+  remove
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDuTkiyJn1Id6BYvU1Oiwlf4mvmKSsAwsw",
   authDomain: "my-tasker-27723.firebaseapp.com",
   databaseURL: "https://my-tasker-27723-default-rtdb.firebaseio.com",
   projectId: "my-tasker-27723",
-  storageBucket: "my-tasker-27723.firebasestorage.app",
+  storageBucket: "my-tasker-27723.appspot.com",
   messagingSenderId: "548756631091",
-  appId: "1:548756631091:web:6ad241db74a8c12e97fd46",
-  measurementId: "G-SDVD837JT5"
+  appId: "1:548756631091:web:6ad241db74a8c12e97fd46"
 };
 
-// تهيئة Firebase
+// init Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// دالة لفتح التبويبات عند النقر
-function openTab(tabId) {
-  document.querySelector(".container").style.display = "none";
-  document.querySelectorAll(".tab").forEach(tab => tab.style.display = "none");
+// Show tab
+window.openTab = function (tabId) {
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.style.display = "none";
+  });
   document.getElementById(tabId).style.display = "flex";
-}
+  document.querySelector(".container").style.display = "none";
+  loadTasks(tabId);
+};
 
-// دالة للرجوع إلى الصفحة الرئيسية
-function goHome() {
+// Go home
+window.goHome = function () {
   document.querySelector(".container").style.display = "flex";
-  document.querySelectorAll(".tab").forEach(tab => tab.style.display = "none");
-}
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.style.display = "none";
+  });
+};
 
-// دالة لإضافة مهمة جديدة
-function addTask(tabId) {
+// Add task
+window.addTask = function (tabId) {
   const input = document.getElementById(`input-${tabId}`);
   const text = input.value.trim();
   if (!text) return;
 
-  const task = { text, date: new Date().toLocaleString() };
+  const task = {
+    text,
+    date: new Date().toLocaleString()
+  };
 
-  // تخزين المهمة في Firebase
-  const newTaskRef = ref(db, `${tabId}/` + Date.now());
-  set(newTaskRef, task);
-
-  // إعادة تحميل المهام
-  renderTasks(tabId);
-  input.value = "";
-}
-
-// دالة لاسترجاع المهام من Firebase
-function getTasks(tabId) {
-  const dbRef = ref(db, tabId);
-  get(dbRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const tasks = snapshot.val();
-      renderTasks(tabId, tasks);
-    } else {
-      renderTasks(tabId);
-    }
-  }).catch((error) => {
-    console.error(error);
+  const tasksRef = ref(db, tabId);
+  const newTaskRef = push(tasksRef);
+  set(newTaskRef, task).then(() => {
+    input.value = "";
   });
-}
+};
 
-// دالة لعرض المهام في الواجهة
-function renderTasks(tabId, tasks = {}) {
-  const container = document.querySelector(`[data-tab="${tabId}"]`);
-  container.innerHTML = "";
+// Load tasks
+function loadTasks(tabId) {
+  const tasksContainer = document.querySelector(`[data-tab="${tabId}"]`);
+  tasksContainer.innerHTML = "";
 
-  // عرض المهام في الواجهة
-  for (let key in tasks) {
-    const task = tasks[key];
-    const item = document.createElement("div");
-    item.className = "task-item";
-    item.innerHTML = `
-      <div>${task.text}</div>
-      <div class="task-date">📅 ${task.date}</div>
-      <div class="task-actions">
-        <button onclick="editTask('${tabId}', '${key}')">✏️ تحرير</button>
-        <button onclick="deleteTask('${tabId}', '${key}')">🗑️ مسح</button>
-      </div>
-    `;
-    container.appendChild(item);
-  }
-}
+  const tasksRef = ref(db, tabId);
+  onValue(tasksRef, snapshot => {
+    tasksContainer.innerHTML = "";
+    const data = snapshot.val();
+    if (!data) return;
 
-// دالة لتعديل مهمة معينة
-function editTask(tabId, key) {
-  const dbRef = ref(db, `${tabId}/${key}`);
-  get(dbRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const task = snapshot.val();
-      const newText = prompt("تعديل المهمة:", task.text);
-      if (newText) {
-        task.text = newText;
-        set(dbRef, task);
-        renderTasks(tabId);
-      }
-    }
-  });
-}
-
-// دالة لحذف مهمة معينة
-function deleteTask(tabId, key) {
-  const pass = prompt("ادخل كلمة السر لمسح المهمة:");
-  if (pass === "tasker") {
-    const taskRef = ref(db, `${tabId}/${key}`);
-    set(taskRef, null);  // حذف المهمة من Firebase
-    renderTasks(tabId);
-  } else {
-    alert("كلمة السر غير صحيحة ❌");
-  }
-}
-
-// تحميل المهام عند فتح الصفحة
-window.addEventListener("load", () => {
-  // استماع للتغييرات في البيانات في Firebase
-  ["tab1", "tab2", "tab3", "tab4"].forEach(tabId => {
-    const dbRef = ref(db, tabId);
-    onValue(dbRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const tasks = snapshot.val();
-        renderTasks(tabId, tasks);
-      } else {
-        renderTasks(tabId);
-      }
+    Object.entries(data).forEach(([key, task], index) => {
+      const div = document.createElement("div");
+      div.className = "task-item";
+      div.innerHTML = `
+        <div>${index + 1}. ${task.text}</div>
+        <div class="task-date">📅 ${task.date}</div>
+        <div class="task-actions">
+          <button onclick="editTask('${tabId}', '${key}', '${task.text}')">✏️ تعديل</button>
+          <button onclick="deleteTask('${tabId}', '${key}')">🗑️ مسح</button>
+        </div>
+      `;
+      tasksContainer.appendChild(div);
     });
   });
-});
-
-// دالة لتنزيل قاعدة البيانات
-function downloadDatabase() {
-  const dbRef = ref(db);
-  get(dbRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const db = snapshot.val();
-      const blob = new Blob([JSON.stringify(db, null, 2)], { type: "text/plain" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "backup.txt";
-      a.click();
-    }
-  });
 }
 
-// دالة لرفع قاعدة البيانات من ملف
-function uploadDatabase(event) {
+// Delete task
+window.deleteTask = function (tabId, key) {
+  const taskRef = ref(db, `${tabId}/${key}`);
+  remove(taskRef);
+};
+
+// Edit task
+window.editTask = function (tabId, key, text) {
+  const input = document.getElementById(`input-${tabId}`);
+  input.value = text;
+  deleteTask(tabId, key);
+};
+
+// Download backup
+window.downloadDatabase = function () {
+  const allRef = ref(db);
+  onValue(allRef, snapshot => {
+    const data = snapshot.val();
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tasks_backup.json";
+    a.click();
+  }, { onlyOnce: true });
+};
+
+// Upload backup
+window.uploadDatabase = function (event) {
   const file = event.target.files[0];
   if (!file) return;
+
   const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      for (let tab of ["tab1", "tab2", "tab3", "tab4"]) {
-        if (data[tab]) {
-          const tabRef = ref(db, tab);
-          set(tabRef, data[tab]);
-        }
-      }
-      alert("تم تحميل البيانات بنجاح ✅");
-    } catch {
-      alert("خطأ في الملف ❌");
-    }
+  reader.onload = function (e) {
+    const data = JSON.parse(e.target.result);
+    Object.keys(data).forEach(tabId => {
+      const tabRef = ref(db, tabId);
+      set(tabRef, data[tabId]);
+    });
+    alert("تم رفع البيانات بنجاح ✅");
   };
   reader.readAsText(file);
-}
+};
