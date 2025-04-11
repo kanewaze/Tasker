@@ -1,115 +1,116 @@
-* {
+body {
+    font-family: 'Cairo', sans-serif;
+    background: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    text-align: center;
+  }
+  
+  h1 {
+    margin-top: 30px;
+    font-size: 32px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+  
+  .container,
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    margin: 20px auto;
+  }
+  
+  button,
+  input[type="text"],
+  .upload-btn {
+    margin: 10px 0;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    width: 100%;
+    max-width: 400px;
     box-sizing: border-box;
   }
   
-  body {
-    font-family: 'Cairo', sans-serif;
-    margin: 0;
-    background: #121212;
-    color: white;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .container, .tab {
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  h1, h2 {
-    margin-bottom: 20px;
-  }
-  
   button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 15px;
-    font-size: 16px;
-    border-radius: 15px;
-    border: none;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.1);
     color: white;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
     transition: 0.3s;
   }
   
   button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  .back {
-    background-color: #444;
+    background: rgba(255, 255, 255, 0.2);
   }
   
   input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 15px;
-    background-color: #1f1f1f;
+    background: rgba(255, 255, 255, 0.1);
     color: white;
+    border: 1px solid #444;
+    backdrop-filter: blur(6px);
   }
   
   .tab {
     display: none;
-  }
-  
-  .task-section {
-    margin-top: 20px;
+    text-align: center;
   }
   
   .task-item {
+    width: 100%;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 15px;
-    margin-bottom: 15px;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    position: relative;
     text-align: right;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  }
-  
-  .task-text {
-    font-size: 16px;
-    margin-bottom: 5px;
+    box-sizing: border-box;
   }
   
   .task-date {
-    font-size: 12px;
-    color: #ccc;
-    margin-bottom: 10px;
+    font-size: 13px;
+    color: #bbb;
+    margin-top: 5px;
   }
   
   .task-actions {
     display: flex;
+    justify-content: center;
     gap: 10px;
-  }
-  
-  .task-actions button {
-    flex: 1;
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 10px;
-  }
-  
-  .task-actions .delete {
-    background-color: #c0392b;
-  }
-  
-  .upload-label {
-    display: block;
     margin-top: 10px;
-    background-color: rgba(255,255,255,0.1);
-    padding: 15px;
-    border-radius: 15px;
-    cursor: pointer;
   }
-  .upload-label input {
+  
+  .upload-btn {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    text-align: center;
+  }
+  
+  .upload-btn input {
     display: none;
+  }
+  
+  h2 {
+    margin-bottom: 15px;
   }
   

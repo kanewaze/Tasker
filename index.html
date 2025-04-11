@@ -2,61 +2,58 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>مهامي الدراسية</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>📚 اختر المادة</h1>
+    <h1>My Tasker</h1> <!-- العنوان الجديد -->
+    <div class="container home">
     <button onclick="openTab('tab1')">مناهج بحث في التخصص</button>
     <button onclick="openTab('tab2')">تصميم تعليمي</button>
-    <button onclick="openTab('tab3')">مناهج و طرق تدريس</button>
+    <button onclick="openTab('tab3')">مناهج وطرق تدريس</button>
     <button onclick="openTab('tab4')">الأصول الفلسفية والنظرية لتكنولوجيا</button>
-
     <hr>
-    <button onclick="downloadDatabase()">⬇️ تحميل النسخة الاحتياطية</button>
-    <label class="upload-label">
-      ⬆️ رفع نسخة احتياطية
-      <input type="file" onchange="uploadDatabase(event)">
+    <button onclick="downloadDatabase()">⬇️ تحميل البيانات</button>
+    <label class="upload-btn">
+      ⬆️ رفع البيانات
+      <input type="file" id="upload" onchange="uploadDatabase(event)">
     </label>
   </div>
 
-  <div id="tabs">
-    <div id="tab1" class="tab">
-      <h2>مناهج بحث في التخصص</h2>
-      <button class="back" onclick="goHome()">⬅ العودة</button>
-      <div class="task-section" data-tab="tab1"></div>
-      <input type="text" id="input-tab1" placeholder="اكتب المهمة">
-      <button onclick="addTask('tab1')">➕ إضافة</button>
-    </div>
-
-    <div id="tab2" class="tab">
-      <h2>تصميم تعليمي</h2>
-      <button class="back" onclick="goHome()">⬅ العودة</button>
-      <div class="task-section" data-tab="tab2"></div>
-      <input type="text" id="input-tab2" placeholder="اكتب المهمة">
-      <button onclick="addTask('tab2')">➕ إضافة</button>
-    </div>
-
-    <div id="tab3" class="tab">
-      <h2>مناهج و طرق تدريس</h2>
-      <button class="back" onclick="goHome()">⬅ العودة</button>
-      <div class="task-section" data-tab="tab3"></div>
-      <input type="text" id="input-tab3" placeholder="اكتب المهمة">
-      <button onclick="addTask('tab3')">➕ إضافة</button>
-    </div>
-
-    <div id="tab4" class="tab">
-      <h2>الأصول الفلسفية والنظرية لتكنولوجيا</h2>
-      <button class="back" onclick="goHome()">⬅ العودة</button>
-      <div class="task-section" data-tab="tab4"></div>
-      <input type="text" id="input-tab4" placeholder="اكتب المهمة">
-      <button onclick="addTask('tab4')">➕ إضافة</button>
-    </div>
+  <!-- القوالب الأربعة -->
+  <div id="tab1" class="tab">
+    <h2>مناهج بحث في التخصص</h2>
+    <input type="text" id="input-tab1" placeholder="اكتب المهمة...">
+    <button onclick="addTask('tab1')">➕ إضافة</button>
+    <div class="tasks" data-tab="tab1"></div>
+    <button onclick="goHome()">🏠 الرئيسية</button>
   </div>
 
-  <script src="script.js"></script>
+  <div id="tab2" class="tab">
+    <h2>تصميم تعليمي</h2>
+    <input type="text" id="input-tab2" placeholder="اكتب المهمة...">
+    <button onclick="addTask('tab2')">➕ إضافة</button>
+    <div class="tasks" data-tab="tab2"></div>
+    <button onclick="goHome()">🏠 الرئيسية</button>
+  </div>
+
+  <div id="tab3" class="tab">
+    <h2>مناهج وطرق تدريس</h2>
+    <input type="text" id="input-tab3" placeholder="اكتب المهمة...">
+    <button onclick="addTask('tab3')">➕ إضافة</button>
+    <div class="tasks" data-tab="tab3"></div>
+    <button onclick="goHome()">🏠 الرئيسية</button>
+  </div>
+
+  <div id="tab4" class="tab">
+    <h2>الأصول الفلسفية والنظرية لتكنولوجيا</h2>
+    <input type="text" id="input-tab4" placeholder="اكتب المهمة...">
+    <button onclick="addTask('tab4')">➕ إضافة</button>
+    <div class="tasks" data-tab="tab4"></div>
+    <button onclick="goHome()">🏠 الرئيسية</button>
+  </div>
 </body>
 </html>

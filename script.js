@@ -1,170 +1,128 @@
-// تحميل backup.txt عند أول فتح للموقع
-window.addEventListener('load', () => {
-    if (!localStorage.getItem('initialized')) {
-      fetch('backup.txt')
-        .then(response => response.text())
-        .then(data => {
-          try {
-            const db = JSON.parse(data);
-            ['tab1', 'tab2', 'tab3', 'tab4'].forEach(tabId => {
-              if (db[tabId]) {
-                localStorage.setItem(tabId, JSON.stringify(db[tabId]));
-              }
-            });
-            localStorage.setItem('initialized', 'true');
-            loadTasks();
-          } catch (e) {
-            console.error("الملف غير صالح أو مش بصيغة JSON");
-          }
-        }).catch(err => {
-          console.warn("مش لاقي ملف backup.txt، جاري استخدام البيانات المحفوظة");
-          loadTasks();
-        });
-    } else {
+// تحميل من GitHub أو backup.txt (نسخة JSON)
+window.addEventListener("load", () => {
+  fetch("backup.txt")
+    .then(res => res.text())
+    .then(txt => {
+      const data = JSON.parse(txt);
+      for (let tab of ["tab1", "tab2", "tab3", "tab4"]) {
+        if (data[tab]) {
+          localStorage.setItem(tab, JSON.stringify(data[tab]));
+        }
+      }
       loadTasks();
-    }
+    })
+    .catch(() => {
+      loadTasks(); // لو مفيش ملف، اشتغل بالقديم
+    });
+});
+
+function openTab(tabId) {
+  document.querySelector(".container").style.display = "none";
+  document.querySelectorAll(".tab").forEach(tab => tab.style.display = "none");
+  document.getElementById(tabId).style.display = "flex";
+}
+
+function goHome() {
+  document.querySelector(".container").style.display = "flex";
+  document.querySelectorAll(".tab").forEach(tab => tab.style.display = "none");
+}
+
+function addTask(tabId) {
+  const input = document.getElementById(`input-${tabId}`);
+  const text = input.value.trim();
+  if (!text) return;
+  const tasks = getTasks(tabId);
+  tasks.push({ text, date: new Date().toLocaleString() });
+  saveTasks(tabId, tasks);
+  renderTasks(tabId);
+  input.value = "";
+}
+
+function getTasks(tabId) {
+  return JSON.parse(localStorage.getItem(tabId)) || [];
+}
+
+function saveTasks(tabId, tasks) {
+  localStorage.setItem(tabId, JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  ["tab1", "tab2", "tab3", "tab4"].forEach(tabId => renderTasks(tabId));
+}
+
+function renderTasks(tabId) {
+  const container = document.querySelector(`[data-tab="${tabId}"]`);
+  container.innerHTML = "";
+  const tasks = getTasks(tabId);
+
+  tasks.forEach((task, i) => {
+    const item = document.createElement("div");
+    item.className = "task-item";
+    item.innerHTML = `
+      <div>${i + 1}. ${task.text}</div>
+      <div class="task-date">📅 ${task.date}</div>
+      <div class="task-actions">
+        <button onclick="editTask('${tabId}', ${i})">✏️ تحرير</button>
+        <button onclick="deleteTask('${tabId}', ${i})">🗑️ مسح</button>
+      </div>
+    `;
+    container.appendChild(item);
   });
-  
-  function openTab(tabId) {
-    // إخفاء الشاشة الرئيسية وعرض التبويبة المطلوبة
-    document.querySelector('.container').style.display = 'none';
-    document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
-    document.getElementById(tabId).style.display = 'block';
-  }
-  
-  function goHome() {
-    // العودة للصفحة الرئيسية
-    document.querySelector('.container').style.display = 'block';
-    document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
-  }
-  
-  function addTask(tabId) {
-    const input = document.getElementById(`input-${tabId}`);
-    const taskText = input.value.trim();
-    if (taskText === '') return;
-  
-    const task = {
-      text: taskText,
-      date: new Date().toLocaleString()
-    };
-  
-    const tasks = getTasks(tabId);
-    tasks.push(task);
+}
+
+function editTask(tabId, index) {
+  const tasks = getTasks(tabId);
+  const newText = prompt("تعديل المهمة:", tasks[index].text);
+  if (newText) {
+    tasks[index].text = newText;
     saveTasks(tabId, tasks);
     renderTasks(tabId);
-  
-    input.value = ''; // مسح الحقل بعد إضافة المهمة
   }
-  
-  function renderTasks(tabId) {
-    const section = document.querySelector(`[data-tab="${tabId}"]`);
-    section.innerHTML = ''; // مسح المهام الحالية
+}
+
+function deleteTask(tabId, index) {
+  const pass = prompt("ادخل كلمة السر لمسح المهمة:");
+  if (pass === "tasker") {
     const tasks = getTasks(tabId);
-  
-    tasks.forEach((task, index) => {
-      const item = document.createElement('div');
-      item.className = 'task-item';
-  
-      const text = document.createElement('div');
-      text.className = 'task-text';
-      text.textContent = task.text;
-  
-      const date = document.createElement('div');
-      date.className = 'task-date';
-      date.textContent = `📅 ${task.date}`;
-  
-      const actions = document.createElement('div');
-      actions.className = 'task-actions';
-  
-      const editBtn = document.createElement('button');
-      editBtn.textContent = '✏️ تحرير';
-      editBtn.onclick = () => {
-        const newText = prompt("تعديل المهمة:", task.text);
-        if (newText) {
-          tasks[index].text = newText;
-          saveTasks(tabId, tasks);
-          renderTasks(tabId);
+    tasks.splice(index, 1);
+    saveTasks(tabId, tasks);
+    renderTasks(tabId);
+  } else {
+    alert("كلمة السر غير صحيحة ❌");
+  }
+}
+
+function downloadDatabase() {
+  const db = {
+    tab1: getTasks("tab1"),
+    tab2: getTasks("tab2"),
+    tab3: getTasks("tab3"),
+    tab4: getTasks("tab4")
+  };
+  const blob = new Blob([JSON.stringify(db, null, 2)], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "backup.txt";
+  a.click();
+}
+
+function uploadDatabase(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      for (let tab of ["tab1", "tab2", "tab3", "tab4"]) {
+        if (data[tab]) {
+          localStorage.setItem(tab, JSON.stringify(data[tab]));
         }
-      };
-  
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = '🗑️ مسح';
-      deleteBtn.className = 'delete';
-      deleteBtn.onclick = () => {
-        const pass = prompt("ادخل كلمة السر لمسح المهمة:");
-        if (pass === 'tasker') {
-          tasks.splice(index, 1);
-          saveTasks(tabId, tasks);
-          renderTasks(tabId);
-        } else {
-          alert("كلمة السر غلط!");
-        }
-      };
-  
-      actions.appendChild(editBtn);
-      actions.appendChild(deleteBtn);
-  
-      item.appendChild(text);
-      item.appendChild(date);
-      item.appendChild(actions);
-  
-      section.appendChild(item);
-    });
-  }
-  
-  function getTasks(tabId) {
-    // استرجاع المهام من localStorage أو العودة لقيمة فارغة إذا لم تكن موجودة
-    return JSON.parse(localStorage.getItem(tabId)) || [];
-  }
-  
-  function saveTasks(tabId, tasks) {
-    // حفظ المهام في localStorage
-    localStorage.setItem(tabId, JSON.stringify(tasks));
-  }
-  
-  // تحميل كل المهام عند فتح الصفحة
-  function loadTasks() {
-    ['tab1', 'tab2', 'tab3', 'tab4'].forEach(tabId => renderTasks(tabId));
-  }
-  
-  // تحميل النسخة الاحتياطية
-  function downloadDatabase() {
-    const db = {
-      tab1: getTasks('tab1'),
-      tab2: getTasks('tab2'),
-      tab3: getTasks('tab3'),
-      tab4: getTasks('tab4')
-    };
-    const dataStr = JSON.stringify(db, null, 2);
-    const blob = new Blob([dataStr], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-  
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tasks_backup.txt';
-    a.click();
-  }
-  
-  // رفع النسخة الاحتياطية
-  function uploadDatabase(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-  
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const db = JSON.parse(e.target.result);
-        ['tab1', 'tab2', 'tab3', 'tab4'].forEach(tabId => {
-          if (db[tabId]) {
-            localStorage.setItem(tabId, JSON.stringify(db[tabId]));
-          }
-        });
-        alert("تم استرجاع النسخة بنجاح ✅");
-        loadTasks();
-      } catch {
-        alert("ملف غير صالح ❌");
       }
-    };
-    reader.readAsText(file);
-  }
-  
+      alert("تم تحميل البيانات بنجاح ✅");
+      loadTasks();
+    } catch {
+      alert("خطأ في الملف ❌");
+    }
+  };
+  reader.readAsText(file);
+}
