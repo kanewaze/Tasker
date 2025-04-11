@@ -101,3 +101,15 @@
     background-color: #c0392b;
   }
   
+  .upload-label {
+    display: block;
+    margin-top: 10px;
+    background-color: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+  .upload-label input {
+    display: none;
+  }
+  

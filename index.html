@@ -14,6 +14,13 @@
     <button onclick="openTab('tab2')">تصميم تعليمي</button>
     <button onclick="openTab('tab3')">مناهج و طرق تدريس</button>
     <button onclick="openTab('tab4')">الأصول الفلسفية والنظرية لتكنولوجيا</button>
+
+    <hr>
+    <button onclick="downloadDatabase()">⬇️ تحميل النسخة الاحتياطية</button>
+    <label class="upload-label">
+      ⬆️ رفع نسخة احتياطية
+      <input type="file" onchange="uploadDatabase(event)">
+    </label>
   </div>
 
   <div id="tabs">
