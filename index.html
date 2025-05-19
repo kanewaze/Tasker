@@ -1,131 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>نظام المهام الدراسية</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="script.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <h1>My Tasker</h1>
-  </header>
-
-  <main class="container">
-    <!-- Home Screen -->
-    <div class="home-screen">
-      <div class="cards-grid">
-        <div class="category-card" onclick="openTab('tab1')">
-          <div class="card-icon">🔍</div>
-          <h3>مناهج بحث في التخصص</h3>
-        </div>
-        
-        <div class="category-card" onclick="openTab('tab2')">
-          <div class="card-icon">🎨</div>
-          <h3>تصميم تعليمي</h3>
-        </div>
-        
-        <div class="category-card" onclick="openTab('tab3')">
-          <div class="card-icon">📝</div>
-          <h3>مناهج وطرق تدريس</h3>
-        </div>
-        
-        <div class="category-card" onclick="openTab('tab4')">
-          <div class="card-icon">💡</div>
-          <h3>الأصول الفلسفية</h3>
-        </div>
-        
-        <div class="category-card backup-card" onclick="showBackupOptions()">
-          <div class="card-icon">💾</div>
-          <h3>النسخ الاحتياطي</h3>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab Screens -->
-    <div id="tab1" class="tab-screen">
-      <div class="tab-header">
-        <button class="back-button" onclick="goHome()">← الرجوع</button>
-        <h2>🔍 مناهج بحث في التخصص</h2>
-      </div>
-      
-      <div class="post-form">
-        <textarea id="input-tab1" placeholder="اكتب مهمة جديدة..." rows="3"></textarea>
-        <div class="form-actions">
-          <button class="post-button" onclick="addTask('tab1')">نشر المهمة</button>
-        </div>
-      </div>
-      
-      <div class="tasks-list" data-tab="tab1"></div>
-    </div>
-
-    <!-- Repeat similar structure for other tabs (tab2, tab3, tab4) -->
-    <div id="tab2" class="tab-screen">
-      <div class="tab-header">
-        <button class="back-button" onclick="goHome()">← الرجوع</button>
-        <h2>🎨 تصميم تعليمي</h2>
-      </div>
-      
-      <div class="post-form">
-        <textarea id="input-tab2" placeholder="اكتب مهمة جديدة..." rows="3"></textarea>
-        <div class="form-actions">
-          <button class="post-button" onclick="addTask('tab2')">نشر المهمة</button>
-        </div>
-      </div>
-      
-      <div class="tasks-list" data-tab="tab2"></div>
-    </div>
-
-    <div id="tab3" class="tab-screen">
-      <div class="tab-header">
-        <button class="back-button" onclick="goHome()">← الرجوع</button>
-        <h2>📝 مناهج وطرق تدريس</h2>
-      </div>
-      
-      <div class="post-form">
-        <textarea id="input-tab3" placeholder="اكتب مهمة جديدة..." rows="3"></textarea>
-        <div class="form-actions">
-          <button class="post-button" onclick="addTask('tab3')">نشر المهمة</button>
-        </div>
-      </div>
-      
-      <div class="tasks-list" data-tab="tab3"></div>
-    </div>
-
-    <div id="tab4" class="tab-screen">
-      <div class="tab-header">
-        <button class="back-button" onclick="goHome()">← الرجوع</button>
-        <h2>💡 الأصول الفلسفية</h2>
-      </div>
-      
-      <div class="post-form">
-        <textarea id="input-tab4" placeholder="اكتب مهمة جديدة..." rows="3"></textarea>
-        <div class="form-actions">
-          <button class="post-button" onclick="addTask('tab4')">نشر المهمة</button>
-        </div>
-      </div>
-      
-      <div class="tasks-list" data-tab="tab4"></div>
-    </div>
-
-    <!-- Backup Modal -->
-    <div id="backupModal" class="modal">
-      <div class="modal-content">
-        <h3>💾 خيارات النسخ الاحتياطي</h3>
-        <button onclick="downloadDatabase()">📥 تحميل نسخة احتياطية</button>
-        <label class="upload-btn">
-          📤 استعادة نسخة احتياطية
-          <input type="file" id="upload" onchange="uploadDatabase(event)">
-        </label>
-        <button onclick="hideBackupOptions()" class="cancel-btn">إلغاء</button>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    <p>© 2025 نظام المهام الدراسية</p>
-  </footer>
-</body>
-</html>
